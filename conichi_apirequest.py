@@ -10,6 +10,9 @@ class ConichiAPIRequest():
         self.api_secret = <api secret goes here>
         self.get_uuid(customer_key, api_secret)
 
+    '''Not sure if the method below is necessary - I am not quite sure What
+    Marc meant in the README by "getting the UUID after login". Is it
+    the session UUID? Is it the merchant's UUID?'''
     def get_uuid(customer_key, api_secret):
 
 
@@ -20,3 +23,8 @@ class ConichiAPIRequest():
 
 # The customer key is something that uniquely identifies the customer,
 # i.e. their email address.
+
+# What I don't know:
+# I don't know whether the username (login) also has to be encrypted
+# I don't know whether I only need to include the password and login in the login request
+# I don't know what the full url of the API I need to call is
