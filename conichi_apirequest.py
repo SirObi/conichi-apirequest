@@ -1,19 +1,28 @@
 import requests
 import hmac
 import hashlib
+import json
+import merchant_login
 
-class ConichiAPIRequest():
-    '''Creates new request object. Customer key and API secret
-    are required to successfully authenticate with Conichi API'''
-    def __init__(self, customer_key, api_secret):
-        self.customer_key = customer_key
+
+class ConichiMerchantRequest():
+    '''Creates new Conichi request object. Authenticates with conichi API
+    and makes user UUID available to created object'''
+    def __init__(self, consumer_key, api_secret, email, password):
+        self.consumer_key = consumer_key
         self._api_secret = api_secret
+        self._email = email
+        self._password = password
+        self._uuid = merchant_login.get_merchant_uuid(consumer_key, email, password)
 
-    '''Not sure if the method below is necessary - I am not quite sure What
-    Marc meant in the README by "getting the UUID after login". Is it
-    the session UUID? Is it the merchant's UUID?'''
-    def get_uuid(customer_key, _api_secret):
-        pass
+    def send_request(self):
+        print self._uuid
+
+
+#new_request = ConichiMerchantRequest(consumer_key, api_secret, email, password)
+#new_request.send_request()
+#print new_request._uuid
+
 
 
 # The goal here is to make a request that contains several headers.
@@ -25,6 +34,9 @@ class ConichiAPIRequest():
 # i.e. their email address.
 
 # What I don't know:
+# Do you need HMAC in order to authenticate?
+# No. It's only necessary when sending requests.
+# That's why you're able to authenticate through Postman, without usin HMAC
 # I don't know whether the username (login) also has to be encrypted
 # Answer: No.
 # I don't know whether I only need to include the password and login in the login request
