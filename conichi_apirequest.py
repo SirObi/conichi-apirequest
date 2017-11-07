@@ -3,8 +3,15 @@ import hmac
 import hashlib
 import json
 import merchant_login
+import base64
 
-
+# The function below belongs in the class
+# It was taken out for debugging purposes
+def body_digest(body):
+    body_json = json.dumps(body)
+    body_hash = base64.b64encode(hmac.new("something", body, hashlib.sha256).digest())
+    return body_hash
+    #TODO: remove unnesessary characters from digest (probably only the '/' characters)
 class ConichiMerchantRequest():
     '''Creates new Conichi request object. Authenticates with conichi API
     and makes user UUID available to created object'''
@@ -14,6 +21,8 @@ class ConichiMerchantRequest():
         self._email = email
         self._password = password
         self._uuid = merchant_login.get_merchant_uuid(consumer_key, email, password)
+
+
 
     def send_request(self):
         print self._uuid
