@@ -10,8 +10,10 @@ import base64
 def body_digest(body):
     body_json = json.dumps(body)
     body_hash = base64.b64encode(hmac.new("something", body, hashlib.sha256).digest())
+    body_hash = body_hash.replace('/', '_')
+    body_hash = body_hash.replace('+', '-')
     return body_hash
-    #TODO: remove unnesessary characters from digest (probably only the '/' characters)
+    
 class ConichiMerchantRequest():
     '''Creates new Conichi request object. Authenticates with conichi API
     and makes user UUID available to created object'''
