@@ -22,30 +22,38 @@ class ConichiMerchantRequest():
     def _body_digest(self, body):
         '''Takes request body and outputs a 64-character-long hash.
         This hash is a necessary component of the final hash'''
-        apisecret = self._api_secret
-        body_hash = base64.b64encode(hmac.new(apisecret, body,
-                                              hashlib.sha256).digest())
-        body_hash = body_hash.replace('/', '_')
-        body_hash = body_hash.replace('+', '-')
-        return body_hash
+        try:
+            apisecret = self._api_secret
+            body_hash = base64.b64encode(hmac.new(str(apisecret), str(body),
+                                                  hashlib.sha256).digest())
+            body_hash = body_hash.replace('/', '_')
+            body_hash = body_hash.replace('+', '-')
+            return body_hash
+        except Exception:
+            print "Creating body hash failed"
 
     def _normalized_string(self, method, url, body, current_timestamp):
         '''Concatenates additional parameters required for final hash'''
-        uuid = self._uuid
-        body_hash = self._body_digest(body)
-        normalized_string = (uuid + '\n' + method + '\n' + url + '\n' +
-                             body_hash + '\n' + current_timestamp)
-
-        return normalized_string
+        try:
+            uuid = self._uuid
+            body_hash = self._body_digest(body)
+            normalized_string = (uuid + '\n' + method + '\n' + url + '\n' +
+                                 body_hash + '\n' + current_timestamp)
+            return normalized_string
+        except Exception:
+            print "Could not create normalized string"
 
     def _final_digest(self, normalized_string):
         '''Creates hmac required by conichi API'''
-        apisecret = self._api_secret
-        new_hmac = base64.b64encode(hmac.new(apisecret, normalized_string,
-                                             hashlib.sha256).digest())
-        new_hmac = new_hmac.replace('/', '_')
-        new_hmac = new_hmac.replace('+', '-')
-        return new_hmac
+        try:
+            apisecret = self._api_secret
+            new_hmac = base64.b64encode(hmac.new(str(apisecret), str(normalized_string),
+                                                 hashlib.sha256).digest())
+            new_hmac = new_hmac.replace('/', '_')
+            new_hmac = new_hmac.replace('+', '-')
+            return new_hmac
+        except Exception:
+            print "Creating final hash failed"
 
     def send_request(self, method, body, url):
         '''Sends request signed with user's API secret'''
