@@ -76,6 +76,8 @@ class ConichiMerchantRequest():
 
         response = requests.request(method, url, data=body, headers=headers)
         pprint.pprint(response.json())
+        print "Request was: " + response.request.body
+        print "Body_hash in request: " + response.request.headers['X-Body-Hash']
         return response.json()
 
 
