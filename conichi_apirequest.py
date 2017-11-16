@@ -57,7 +57,7 @@ class ConichiMerchantRequest():
 
     def send_request(self, method, body, url):
         '''Sends request signed with user's API secret'''
-        body = json.dumps(body)
+        body = json.dumps(dict(body))
         body_hash = self._body_digest(body)
         current_timestamp = str(int(math.floor(time.time())))
         normalized_string = self._normalized_string(method, url, body,
